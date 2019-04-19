@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Post extends Component {
      
@@ -8,9 +9,12 @@ class Post extends Component {
                <tr>
                     <td>{id}</td>
                     <td>{title}</td>
-                    <td>Acciones aquí</td>
+                    <td>
+                         <Link to={`/post/${id}`} className="btn btn-primary">Ver</Link>
+                         <button onClick={ () => this.props.borrarPost(id) } type="button" className="btn btn-danger">Borrar</button>
+                    </td>
                </tr>
-               );
+          );
      }
 }
  
