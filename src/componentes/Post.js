@@ -14,14 +14,15 @@ class Post extends Component {
                showCancelButton: true,
                confirmButtonColor: '#3085d6',
                cancelButtonColor: '#d33',
-               confirmButtonText: 'Si, eliminar!'
+               confirmButtonText: 'Si, eliminar!',
+               cancelButtonText: 'Cancelar'
           }).then((result) => {
                if (result.value) {
                     this.props.borrarPost(id)
                     swal.fire(
                     'Eliminado!',
                     'Su entrada ha sido eliminada.',
-                    'exitosamente'
+                    'success'
                     )
                }
           })
@@ -36,6 +37,7 @@ class Post extends Component {
                     <td>{title}</td>
                     <td>
                          <Link to={`/post/${id}`} className="btn btn-primary">Ver</Link>
+                         <Link to={`/editar/${id}`} className="btn btn-warning">Editar</Link>
                          <button onClick={ this.confirmarEliminar } type="button" className="btn btn-danger">Borrar</button>
                     </td>
                </tr>

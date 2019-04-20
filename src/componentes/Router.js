@@ -7,6 +7,7 @@ import Navegacion from './Navegacion';
 import Posts from './Posts';
 import SinglePost from './SinglePost';
 import Formulario from './Formulario';
+import EditarPost from './EditarPost';
 
 class Router extends Component {
      state = { 
@@ -44,6 +45,11 @@ class Router extends Component {
           axios.post(`https://jsonplaceholder.typicode.com/posts`, { post })
                .then(res => {
                     if (res.status === 201) {
+                         swal.fire(
+                              'Genial, Entrada creada!',
+                              'Se creó exitosamente!',
+                              'success'
+                            )
                          let postId = { id: res.data.id };
                          const nuevoPost = Object.assign({}, res.data.post, postId);
                          
@@ -52,6 +58,31 @@ class Router extends Component {
                          }))
                     }
                })
+     }
+     editarPost = (postActualizado) => {
+
+          const { id } = postActualizado;
+          axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, {postActualizado})
+               .then(res => {
+                    if (res.status === 200) {
+                         swal.fire(
+                              'Genial, entrada actualizada!',
+                              'Se editó exitosamente!',
+                              'success'
+                            )
+                         let postId = res.data.id;
+
+                         const posts = [...this.state.posts];
+
+                         const postEditar = posts.findIndex(post => postId === post.id);
+
+                         posts[postEditar] = postActualizado;
+
+                         this.setState({
+                              posts
+                         })
+                    }
+                })
      }
      render() { 
           return ( 
@@ -96,6 +127,26 @@ class Router extends Component {
                                              />
                                         )
                                    }}
+                                   />
+
+                                   <Route exact path="/editar/:postId" render={ (props) => {
+                                        let idPost = props.location.pathname.replace('/editar/', '');
+                                        
+                                        const posts = this.state.posts;
+
+                                        let filtro;
+                                        filtro = posts.filter(post => (
+                                             post.id === Number(idPost)
+                                        ))
+                                        
+                                        return (
+                                             <EditarPost 
+                                                  post={filtro[0]}
+                                                  editarPost={this.editarPost}
+                                             />
+                                        )
+                                   } }
+                                   
                                    />
 
                               </Switch>
